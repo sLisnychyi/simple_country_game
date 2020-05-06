@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
+          integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.14.2/dist/bootstrap-table.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.14.2/dist/bootstrap-table.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js"></script>
+</head>
+
+<script type='text/javascript'>
+
+    $(document).ready(getItems());
+
+    function getItems() {
+        $.ajax({
+                url: '/game',
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data);
+                    let i = 0;
+                    data.map(e => {
+                    i++;
+                    return $("#items").append("<li>" +
+                     "<h3> What is the capital of " + e.question + " ? </h3><br/>" +
+                     "<h4> Variants " + e.answers + "</h4><br/>" + "</li>")})
+<!--                     "<input type='text' id= " + "'inp" + i + "'> Variants " + e.answers + "</h4><br/>" +-->
+<!--                     + "</li>")})-->
+                    console.log(JSON.stringify(data));
+                },
+                error: function (err) {
+                    console.error(JSON.stringify(err));
+                }
+            });
+    }
+
+    function sendResult() {
+
+        let a = $("inp1");
+        let b = $("inp2");
+        let c = $("inp3");
+
+        const request = {
+            answers: a + ',' + b + ',' + c
+        };
+
+        $.ajax({
+                url: '/game',
+                type: 'POST',
+                data: JSON.stringify(request),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data);
+                    $('#result').append('<h1>' + data + ' from 3</h1>')
+                },
+                error: function (err) {
+                    console.error(JSON.stringify(err));
+                }
+            });
+    }
+
+</script>
+
+
+<body>
+
+<!--    <button>Refresh</button>-->
+    <br/>
+    <div>
+        <ul id="items"></ul>
+    </div>
+<!--    <button onclick="sendResult()">Submit</button>-->
+    <br/>
+    <span id="result"></span>
+<img src="https://scontent.fiev6-1.fna.fbcdn.net/v/t31.0-8/19574998_1546366475408065_4252246262961545722_o.jpg?_nc_cat=105&_nc_sid=daf655&_nc_ohc=vtZmX5V9DbAAX_Vwr4f&_nc_ht=scontent.fiev6-1.fna&oh=ac11a4a6f5d74f1ea5afff2f2d0091b4&oe=5EDA6868">
+</body>
+</html>
